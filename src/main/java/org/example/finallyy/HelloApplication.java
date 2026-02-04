@@ -8,12 +8,23 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
+
+
+
+    public static void main(String[] args) {
+        launch();
+    }
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        DatabaseHandler.initializeDatabase();
+
+        // এখানে ফাইলের নাম "login.fxml" অথবা "register.fxml" ঠিকভাবে দিন
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login.fxml"));
+
+        Scene scene = new Scene(fxmlLoader.load(), 1080, 720);
+        stage.setTitle("Campus Life Hub");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 }

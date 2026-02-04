@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #000000;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.finallyy.LoginController">
+    <children>
+        <!-- Top Navigation Buttons -->
+        <HBox alignment="CENTER_RIGHT" layoutX="500.0" layoutY="20.0" prefWidth="480.0" spacing="20.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#handleAboutUs" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: rgba(255, 255, 255, 0.3); -fx-border-radius: 20; -fx-cursor: hand;" text="About Us">
+                    <font><Font name="System Bold" size="13.0" /></font>
+                </Button>
+                <Button mnemonicParsing="false" onAction="#handleContactUs" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: rgba(255, 255, 255, 0.3); -fx-border-radius: 20; -fx-cursor: hand;" text="Contact Us">
+                    <font><Font name="System Bold" size="13.0" /></font>
+                </Button>
+            </children>
+        </HBox>
+
+        <!-- Left Gradient Section -->
+        <VBox alignment="CENTER" prefHeight="700.0" prefWidth="500.0" spacing="25.0" style="-fx-background-color: linear-gradient(to bottom right, #2D0036, #000000, #4B0082, #FF0080); -fx-background-radius: 0 60 60 0;">
+            <children>
+                <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" smooth="true">
+                    <image>
+                        <Image url="@MIST_Logo_0.png" />
+                    </image>
+                </ImageView>
+                <Label alignment="CENTER" prefWidth="450.0" text="Welcome Back to&#10;Campus Life Hub" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                    <font><Font name="System Bold" size="42.0" /></font>
+                </Label>
+            </children>
+        </VBox>
+
+        <!-- Login Form Section -->
+        <AnchorPane layoutX="575.0" layoutY="100.0" prefHeight="500.0" prefWidth="380.0" style="-fx-background-color: rgba(255, 255, 255, 0.05); -fx-background-radius: 40; -fx-border-color: rgba(255, 255, 255, 0.1); -fx-border-radius: 40; -fx-border-width: 2;">
+            <children>
+                <VBox alignment="CENTER" layoutX="40.0" layoutY="30.0" prefWidth="300.0" spacing="15.0">
+                    <children>
+                        <Label text="Login" textFill="#FF0080">
+                            <font><Font name="System Bold" size="36.0" /></font>
+                        </Label>
+
+                        <HBox alignment="CENTER" spacing="5.0">
+                            <children>
+                                <Label text="Don't have an account?" textFill="#aaaaaa" />
+                                <Hyperlink onAction="#handleGoToRegister" text="Register now!" textFill="#bc8cf2">
+                                    <font><Font name="System Bold" size="13.0" /></font>
+                                </Hyperlink>
+                            </children>
+                        </HBox>
+
+                        <TextField fx:id="loginUsernameField" prefHeight="45.0" promptText="Username" style="-fx-background-color: #1a1a1a; -fx-text-fill: white; -fx-background-radius: 12; -fx-border-color: #4B0082;" />
+
+                        <PasswordField fx:id="loginPasswordField" prefHeight="45.0" promptText="Password" style="-fx-background-color: #1a1a1a; -fx-text-fill: white; -fx-background-radius: 12; -fx-border-color: #4B0082;" />
+
+                        <ComboBox fx:id="loginRoleComboBox" prefHeight="45.0" prefWidth="300.0" promptText="Select Role" style="-fx-background-color: #1a1a1a; -fx-background-radius: 12; -fx-border-color: #FF0080;">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Admin" />
+                                    <String fx:value="Student" />
+                                    <String fx:value="Doctor" />
+                                    <String fx:value="Shopkeeper" />
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+
+                        <Label fx:id="loginErrorLabel" textAlignment="CENTER" textFill="#ff4d4d" wrapText="true">
+                            <font><Font size="12.0" /></font>
+                        </Label>
+
+                        <Button fx:id="loginButton" onAction="#handleLogin" prefHeight="55.0" prefWidth="300.0" style="-fx-background-color: linear-gradient(to right, #4B0082, #FF0080); -fx-background-radius: 30; -fx-cursor: hand;" text="Login" textFill="WHITE">
+                            <font><Font name="System Bold" size="18.0" /></font>
+                        </Button>
+                    </children>
+                </VBox>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>
