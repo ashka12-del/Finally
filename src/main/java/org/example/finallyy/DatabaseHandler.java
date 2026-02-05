@@ -10,8 +10,7 @@ public class DatabaseHandler {
     }
 
     public static void initializeDatabase() {
-        // টেবিল তৈরির সময় 'status' কলাম নিশ্চিত করা হয়েছে
-        String createTableSQL = "CREATE TABLE IF NOT EXISTS users ("
+        String createUserTable = "CREATE TABLE IF NOT EXISTS users ("
                 + "id TEXT PRIMARY KEY,"
                 + "username TEXT,"
                 + "email TEXT,"
@@ -19,27 +18,28 @@ public class DatabaseHandler {
                 + "role TEXT,"
                 + "status TEXT DEFAULT 'Pending');";
 
-        try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement()) {
+        String createHealthTable = "CREATE TABLE IF NOT EXISTS health_requests ("
+                + "request_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + "student_id TEXT,"
+                + "symptoms TEXT,"
+                + "type TEXT,"
+                + "time_slot TEXT,"
+                + "status TEXT DEFAULT 'Pending',"
+                + "prescription TEXT,"
+                + "doctor_note TEXT);";
 
-            stmt.execute(createTableSQL);
-
-            // যদি কলাম না থাকে তবে তা যোগ করবে (আপনার ডাটাবেস স্ক্রিনশট ৭৭৮ এর সমস্যা সমাধান করবে)
-            try {
-                stmt.execute("ALTER TABLE users ADD COLUMN status TEXT DEFAULT 'Pending'");
-            } catch (SQLException ignored) {}
-
-            System.out.println("Database Initialized!");
+        try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
+            stmt.execute(createUserTable);
+            stmt.execute(createHealthTable);
+            System.out.println("Database Initialized Successfully!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    // RegisterController-এর জন্য এই মেথডটি যোগ করুন
     public static boolean registerUser(String user, String email, String id, String pass, String role) {
         String sql = "INSERT INTO users(id, username, email, password, role, status) VALUES(?,?,?,?,?,'Pending')";
-        try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, id);
             pstmt.setString(2, user);
             pstmt.setString(3, email);
@@ -47,9 +47,18 @@ public class DatabaseHandler {
             pstmt.setString(5, role);
             pstmt.executeUpdate();
             return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        } catch (SQLException e) { return false; }
+    }
+
+    public static boolean saveHealthRequest(String stdId, String symptoms, String type, String time) {
+        String sql = "INSERT INTO health_requests (student_id, symptoms, type, time_slot) VALUES (?, ?, ?, ?)";
+        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, stdId);
+            pstmt.setString(2, symptoms);
+            pstmt.setString(3, type);
+            pstmt.setString(4, time);
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) { return false; }
     }
 }

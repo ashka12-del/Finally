@@ -8,129 +8,157 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.sql.*;
 
 public class LoginController {
-
     @FXML private TextField loginUsernameField;
+    @FXML private TextField loginIdField; // User ID input field
     @FXML private PasswordField loginPasswordField;
     @FXML private ComboBox<String> loginRoleComboBox;
     @FXML private Label loginErrorLabel;
 
-    // ডাটাবেস ইউআরএল
     private final String DB_URL = "jdbc:sqlite:campus_life.db";
 
     @FXML
     private void handleLogin(ActionEvent event) {
         String username = loginUsernameField.getText();
+        String userId = loginIdField.getText();
         String password = loginPasswordField.getText();
         String role = loginRoleComboBox.getValue();
 
-        // ১. ইনপুট ফিল্ড চেক
-        if (username.isEmpty() || password.isEmpty() || role == null) {
+        // ১. ইনপুট ফিল্ড খালি আছে কিনা চেক
+        if (username.isEmpty() || userId.isEmpty() || password.isEmpty() || role == null) {
             loginErrorLabel.setText("Please fill in all fields!");
             return;
         }
 
-        // ২. স্পেশাল রোলস (Admin, Shopkeeper, Doctor) - হার্ডকোডেড লগইন
-        if (role.equals("Admin") && username.equalsIgnoreCase("Admin") && password.equals("123")) {
-            switchScene(event, "admin.fxml", "Admin Dashboard");
-            return;
-        }
-        else if (role.equals("Shopkeeper") && username.equalsIgnoreCase("Shopkeeper") && password.equals("123")) {
-            switchScene(event, "shopkeeper.fxml", "Shopkeeper Dashboard");
-            return;
-        }
-        else if (role.equals("Doctor") && username.equalsIgnoreCase("Doctor") && password.equals("123")) {
-            switchScene(event, "doctor.fxml", "Doctor Dashboard");
-            return;
+        // --- হার্ডকোডেড লগইন লজিক (Admin, Doctor, Shopkeeper) ---
+
+        // ২. Admin (ID: 1)
+        if (role.equals("Admin")) {
+            if (userId.equals("1") && username.equalsIgnoreCase("Admin") && password.equals("123")) {
+                switchScene(event, "admin.fxml", "Admin Dashboard");
+                return;
+            } else {
+                loginErrorLabel.setText("Invalid Admin Credentials!");
+                return;
+            }
         }
 
-        // ৩. স্টুডেন্টদের জন্য ডাটাবেস চেক
-        validateUserFromDB(event, username, password, role);
+        // ৩. Doctor (ID: d1, d2)
+        else if (role.equals("Doctor")) {
+            if ((userId.equalsIgnoreCase("d1") || userId.equalsIgnoreCase("d2"))
+                    && username.equalsIgnoreCase("Doctor") && password.equals("123")) {
+                switchScene(event, "doctor.fxml", "Doctor Dashboard");
+                return;
+            } else {
+                loginErrorLabel.setText("Invalid Doctor Credentials! Use d1/d2.");
+                return;
+            }
+        }
+
+        // ৪. Shopkeeper (ID: s1, s2)
+        else if (role.equals("Shopkeeper")) {
+            if ((userId.equalsIgnoreCase("s1") || userId.equalsIgnoreCase("s2"))
+                    && username.equalsIgnoreCase("Shopkeeper") && password.equals("123")) {
+                switchScene(event, "shopkeeper.fxml", "Shopkeeper Dashboard");
+                return;
+            } else {
+                loginErrorLabel.setText("Invalid Shopkeeper Credentials! Use s1/s2.");
+                return;
+            }
+        }
+
+        // --- স্টুডেন্ট ডাটাবেস ভ্যালিডেশন ---
+        if (role.equals("Student")) {
+            validateUserFromDB(event, userId, username, password, role);
+        }
     }
 
-    private void validateUserFromDB(ActionEvent event, String username, String password, String role) {
-        // স্ট্যাটাস এবং ইউজারনেম ডাটাবেস থেকে রিড করা
-        String query = "SELECT status, username FROM users WHERE username = ? AND password = ? AND role = ?";
+    private void validateUserFromDB(ActionEvent event, String userId, String username, String password, String role) {
+        String query = "SELECT id, status, username FROM users WHERE id = ? AND username = ? AND password = ? AND role = ?";
+        String status = "", dbId = "", dbUsername = "";
+        boolean userFound = false;
 
         try (Connection conn = DriverManager.getConnection(DB_URL);
              PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, userId);
+            pstmt.setString(2, username);
+            pstmt.setString(3, password);
+            pstmt.setString(4, role);
 
-            pstmt.setString(1, username);
-            pstmt.setString(2, password);
-            pstmt.setString(3, role);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                String status = rs.getString("status");
-                String dbUsername = rs.getString("username");
-
-                // ৪. স্ট্যাটাস অনুযায়ী মেসেজ এবং সিন পরিবর্তন
-                if (status.equalsIgnoreCase("Accepted")) {
-                    showAlert(Alert.AlertType.INFORMATION, "Success", "Welcome, " + dbUsername + "!");
-                    if (role.equals("Student")) {
-                        switchScene(event, "student.fxml", "Student Dashboard");
-                    }
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    status = rs.getString("status");
+                    dbId = rs.getString("id");
+                    dbUsername = rs.getString("username");
+                    userFound = true;
                 }
-                else if (status.equalsIgnoreCase("Pending")) {
-                    showAlert(Alert.AlertType.WARNING, "Registration Pending",
-                            "Your registration is pending. Please wait for Admin approval.");
-                }
-                else if (status.equalsIgnoreCase("Rejected")) {
-                    showAlert(Alert.AlertType.ERROR, "Registration Rejected",
-                            "Your registration was rejected. Please try again with valid info.");
-                }
-            } else {
-                loginErrorLabel.setText("Invalid Username, Password, or Role!");
             }
-
         } catch (SQLException e) {
-            e.printStackTrace();
             loginErrorLabel.setText("Database Connection Error!");
+            return;
+        }
+
+        if (userFound) {
+            if (status.equalsIgnoreCase("Accepted")) {
+                UserSession.loggedInUserId = dbId;
+                UserSession.loggedInUserName = dbUsername;
+                switchScene(event, "student.fxml", "Student Dashboard");
+            } else if (status.equalsIgnoreCase("Pending")) {
+                showAlert(Alert.AlertType.WARNING, "Pending", "Registration is pending Admin approval.");
+            } else if (status.equalsIgnoreCase("Rejected")) {
+                handleRejectedUser(dbId);
+            }
+        } else {
+            loginErrorLabel.setText("Invalid Student Credentials!");
         }
     }
 
-    // পপ-আপ মেসেজ দেখানোর মেথড
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
+    private void handleRejectedUser(String userId) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Request Rejected");
+        alert.setHeaderText("Registration Rejected!");
+        alert.setContentText("Your data will be cleared. Click OK to try again.");
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                deleteUserFromDB(userId);
+                loginErrorLabel.setText("Data cleared. You can register again.");
+            }
+        });
+    }
+
+    private void deleteUserFromDB(String userId) {
+        String sql = "DELETE FROM users WHERE id = ?";
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            System.out.println("Row Deleted for ID: " + userId);
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+
+    private void switchScene(ActionEvent event, String fxmlFile, String title) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/org/example/finallyy/" + fxmlFile));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root, 1080, 720));
+            stage.setTitle(title);
+            stage.show();
+        } catch (IOException e) { loginErrorLabel.setText("Scene Error: " + fxmlFile); }
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String msg) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText(message);
+        alert.setContentText(msg);
         alert.showAndWait();
     }
 
-    // সিন স্যুইচিং মেথড (পাথ ফিক্সড)
-    private void switchScene(ActionEvent event, String fxmlFile, String title) {
-        try {
-            // আপনার প্যাকেজ স্ট্রাকচার অনুযায়ী রিসোর্স পাথ
-            String resourcePath = "/org/example/finallyy/" + fxmlFile;
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(resourcePath));
-
-            if (loader.getLocation() == null) {
-                loginErrorLabel.setText("FXML not found in: " + resourcePath);
-                return;
-            }
-
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setTitle(title);
-            stage.setScene(new Scene(root, 1080, 720)); // আপনার অ্যাডমিন ডিজাইন অনুযায়ী সাইজ
-            stage.show();
-        } catch (IOException e) {
-            loginErrorLabel.setText("FXML loading error!");
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleGoToRegister(ActionEvent event) {
-        switchScene(event, "register.fxml", "Register - Campus Life Hub");
-    }
-
-    @FXML private void handleAboutUs(ActionEvent event) { System.out.println("Opening About Us..."); }
-    @FXML private void handleContactUs(ActionEvent event) { System.out.println("Opening Contact Us..."); }
+    @FXML private void handleAboutUs(ActionEvent event) { System.out.println("About Us"); }
+    @FXML private void handleContactUs(ActionEvent event) { System.out.println("Contact Us"); }
+    @FXML private void handleGoToRegister(ActionEvent event) { switchScene(event, "register.fxml", "Register"); }
 }

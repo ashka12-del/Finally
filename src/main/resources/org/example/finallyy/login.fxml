@@ -54,7 +54,7 @@
                         </HBox>
 
                         <TextField fx:id="loginUsernameField" prefHeight="45.0" promptText="Username" style="-fx-background-color: #1a1a1a; -fx-text-fill: white; -fx-background-radius: 12; -fx-border-color: #4B0082;" />
-
+                        <TextField fx:id="loginIdField" prefHeight="45.0" promptText="Student ID / Employee ID" style="-fx-background-color: #1a1a1a; -fx-text-fill: white; -fx-background-radius: 12; -fx-border-color: #4B0082;" />
                         <PasswordField fx:id="loginPasswordField" prefHeight="45.0" promptText="Password" style="-fx-background-color: #1a1a1a; -fx-text-fill: white; -fx-background-radius: 12; -fx-border-color: #4B0082;" />
 
                         <ComboBox fx:id="loginRoleComboBox" prefHeight="45.0" prefWidth="300.0" promptText="Select Role" style="-fx-background-color: #1a1a1a; -fx-background-radius: 12; -fx-border-color: #FF0080;">
