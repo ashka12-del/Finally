@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane prefHeight="720.0" prefWidth="1080.0" style="-fx-background-color: #0A0A0A;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.finallyy.DoctorController">
+    <children>
+        <VBox spacing="0">
+            <children>
+                <HBox alignment="CENTER_LEFT" prefHeight="100.0" spacing="25" style="-fx-background-color: linear-gradient(to right, #2D0036, #4B0082, #FF0080); -fx-padding: 0 40 0 30; -fx-border-color: #FF0080; -fx-border-width: 0 0 3 0;">
+                    <children>
+                        <ImageView fitHeight="68.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.3), 10, 0, 0, 0);">
+                            <image>
+                                <Image url="@MIST_Logo_0.png" />
+                            </image>
+                        </ImageView>
+
+                        <VBox alignment="CENTER_LEFT">
+                            <children>
+                                <Text fill="WHITE" text="Doctor Dashboard">
+                                    <font><Font name="System Bold" size="34.0" /></font>
+                                    <effect><DropShadow color="#00000080" radius="5.0" /> </effect>
+                                </Text>
+                                <Text fill="#FFB6C1" text="Medical Consultation • Real-time Monitoring">
+                                    <font><Font name="System Italic" size="15.0" /></font>
+                                </Text>
+                            </children>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button onAction="#handleLogout" style="-fx-background-color: rgba(255, 255, 255, 0.1); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 30; -fx-padding: 12 40; -fx-cursor: hand; -fx-border-color: white; -fx-border-radius: 30; -fx-border-width: 1;" text="Logout">
+                            <effect> <Glow level="0.3" /> </effect>
+                        </Button>
+                    </children>
+                </HBox>
+
+                <HBox alignment="CENTER" spacing="60" style="-fx-padding: 40 40 30 40;">
+                    <children>
+                        <VBox alignment="CENTER" prefHeight="120" prefWidth="260" style="-fx-background-color: #151515; -fx-background-radius: 20; -fx-border-color: #FFD700; -fx-border-width: 2; -fx-effect: dropshadow(gaussian, rgba(255,215,0,0.15), 15, 0, 0, 0);">
+                            <children>
+                                <Text fx:id="pendingCountText" fill="#FFD700" text="0">
+                                    <font><Font name="System Bold" size="42.0" /></font>
+                                </Text>
+                                <Text fill="#E0E0E0" style="-fx-font-weight: bold; -fx-letter-spacing: 1;" text="PENDING REQUESTS" />
+                            </children>
+                        </VBox>
+
+                        <VBox alignment="CENTER" prefHeight="120" prefWidth="260" style="-fx-background-color: #151515; -fx-background-radius: 20; -fx-border-color: #00FF7F; -fx-border-width: 2; -fx-effect: dropshadow(gaussian, rgba(0,255,127,0.15), 15, 0, 0, 0);">
+                            <children>
+                                <Text fx:id="completedCountText" fill="#00FF7F" text="0">
+                                    <font><Font name="System Bold" size="42.0" /></font>
+                                </Text>
+                                <Text fill="#E0E0E0" style="-fx-font-weight: bold; -fx-letter-spacing: 1;" text="ACCEPTED HISTORY" />
+                            </children>
+                        </VBox>
+
+                        <Region HBox.hgrow="ALWAYS" />
+
+                        <VBox spacing="12">
+                            <children>
+                                <Label style="-fx-font-weight: bold; -fx-font-size: 15;" text="Filter Category" textFill="#FF69B4" />
+                                <ComboBox fx:id="typeFilterCombo" onAction="#handleFilter" prefHeight="48.0" prefWidth="240.0" promptText="Choose Type" style="-fx-background-color: #1A1A1A; -fx-text-fill: white; -fx-border-color: #FF0080; -fx-border-radius: 15; -fx-background-radius: 15; -fx-font-size: 14;" />
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+
+                <VBox spacing="15" style="-fx-padding: 0 40 40 40;" VBox.vgrow="ALWAYS">
+                    <children>
+                        <StackPane style="-fx-background-color: rgba(30, 30, 30, 0.6); -fx-background-radius: 30; -fx-padding: 25; -fx-border-color: rgba(255, 0, 128, 0.3); -fx-border-radius: 30; -fx-border-width: 1.5;" VBox.vgrow="ALWAYS">
+                            <children>
+                                <TableView fx:id="appointmentTable" style="-fx-background-color: transparent; -fx-control-inner-background: #1A1A1A; -fx-table-cell-border-color: #333333; -fx-font-size: 14;">
+                                    <columns>
+                                        <TableColumn fx:id="colStudentId" prefWidth="160" text="Student ID" />
+                                        <TableColumn fx:id="colType" prefWidth="200" text="Consultation Type" />
+                                        <TableColumn fx:id="colTime" prefWidth="240" text="Preferred Slot" />
+                                        <TableColumn fx:id="colStatus" prefWidth="160" text="Process Status" />
+                                        <TableColumn fx:id="colAction" prefWidth="230" text="Control Action" />
+                                    </columns>
+                                </TableView>
+                            </children>
+                            <effect> <InnerShadow choke="0.1" color="#000000cc" radius="10.0" /> </effect>
+                        </StackPane>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+
+        <VBox fx:id="prescriptionPane" alignment="CENTER" style="-fx-background-color: rgba(0,0,0,0.95);" visible="false">
+            <children>
+                <VBox maxWidth="620" spacing="30" style="-fx-background-color: #121212; -fx-padding: 50; -fx-background-radius: 40; -fx-border-color: linear-gradient(to top right, #FF0080, #4B0082); -fx-border-width: 3; -fx-effect: dropshadow(three-pass-box, #FF008040, 30, 0, 0, 0);">
+                    <children>
+                        <Text fill="#FF0080" text="Clinical Diagnostic Entry">
+                            <font><Font name="System Bold" size="30.0" /></font>
+                            <effect> <Glow level="0.5" /> </effect>
+                        </Text>
+
+                        <VBox spacing="15" style="-fx-background-color: #1A1A1A; -fx-padding: 25; -fx-background-radius: 20; -fx-border-color: #333333;">
+                            <children>
+                                <Label fx:id="detailsLabel" style="-fx-font-size: 17; -fx-line-spacing: 6; -fx-font-family: 'Segoe UI';" textFill="WHITE" wrapText="true" />
+                            </children>
+                        </VBox>
+
+                        <VBox fx:id="prescriptionInputBox" spacing="12">
+                            <children>
+                                <Label style="-fx-font-weight: bold; -fx-font-size: 15;" text="Prescription / Medical Advice" textFill="#FF69B4" />
+                                <TextArea fx:id="prescriptionArea" prefHeight="140" promptText="Enter medicines, dosage, and duration..." style="-fx-control-inner-background: #0A0A0A; -fx-text-fill: white; -fx-background-radius: 15; -fx-border-color: #4B0082; -fx-font-size: 14;" />
+                            </children>
+                        </VBox>
+
+                        <VBox fx:id="noteInputBox" spacing="12">
+                            <children>
+                                <Label style="-fx-font-weight: bold; -fx-font-size: 15;" text="Internal Clinical Notes" textFill="#FF69B4" />
+                                <TextArea fx:id="noteArea" prefHeight="100" promptText="Note for medical history..." style="-fx-control-inner-background: #0A0A0A; -fx-text-fill: white; -fx-background-radius: 15; -fx-border-color: #4B0082; -fx-font-size: 14;" />
+                            </children>
+                        </VBox>
+
+                        <HBox alignment="CENTER_RIGHT" spacing="30">
+                            <Button onAction="#closePrescription" style="-fx-background-color: transparent; -fx-text-fill: #999999; -fx-cursor: hand; -fx-font-size: 16; -fx-font-weight: bold;" text="CANCEL" />
+                            <Button onAction="#submitPrescription" prefWidth="240" style="-fx-background-color: linear-gradient(to right, #FF0080, #4B0082); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 30; -fx-padding: 15 0; -fx-cursor: hand; -fx-font-size: 16;" text="CONFIRM &amp; ACCEPT">
+                                <effect> <DropShadow blurType="GAUSSIAN" color="#ff008080" radius="15.0" /> </effect>
+                            </Button>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </children>
+</StackPane>

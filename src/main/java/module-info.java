@@ -11,6 +11,7 @@ module org.example.finallyy {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires org.xerial.sqlitejdbc;
 
     opens org.example.finallyy to javafx.fxml;
     exports org.example.finallyy;

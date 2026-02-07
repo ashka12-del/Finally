@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="TOP_CENTER" spacing="25.0" style="-fx-background-color: linear-gradient(to bottom right, #0a0a0a, #1a0f1a, #0f172a); -fx-padding: 40;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.finallyy.HealthController">
+    <children>
+        <HBox alignment="CENTER_LEFT" prefHeight="80.0">
+            <children>
+                <Region HBox.hgrow="ALWAYS" />
+                <Button onAction="#goBackToDashboard" style="-fx-background-color: transparent; -fx-text-fill: #ff4081; -fx-background-radius: 12; -fx-padding: 10 20; -fx-cursor: hand; -fx-border-color: #ff4081; -fx-border-radius: 12; -fx-border-width: 1.5;" text="⬅ Back to Dashboard" />
+            </children>
+        </HBox>
+
+        <VBox alignment="CENTER" spacing="10">
+            <Text fill="#ffffff" text="Medical Consultation Request">
+                <font><Font name="Segoe UI Bold" size="42.0" /></font>
+            </Text>
+            <HBox alignment="CENTER" spacing="5">
+                <Text fill="#94a3b8" text="Expert medical support for">
+                    <font><Font size="16.0" /></font>
+                </Text>
+                <Text fill="#ff4081" text="MIST Students">
+                    <font><Font name="System Bold Italic" size="16.0" /></font>
+                </Text>
+            </HBox>
+            <Separator opacity="0.1" prefWidth="700.0" style="-fx-background-color: #ff4081;" />
+        </VBox>
+
+        <GridPane alignment="CENTER" hgap="35.0" vgap="25.0">
+            <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" minWidth="160.0" />
+                <ColumnConstraints hgrow="ALWAYS" minWidth="500.0" />
+            </columnConstraints>
+            <children>
+                <Label text="Select Doctor" textFill="#fce4ec">
+                    <font><Font name="System Bold" size="18.0" /></font>
+                </Label>
+                <VBox spacing="8" GridPane.columnIndex="1">
+                    <ComboBox fx:id="doctorBox" onAction="#handleDoctorSelection" prefHeight="50.0" prefWidth="550.0" promptText="Choose a Specialist" style="-fx-background-radius: 12; -fx-background-color: #ffffff;" />
+                    <Label fx:id="countLabel" text="Waitlist Status: N/A" textFill="#00e676">
+                        <font><Font name="System Bold Italic" size="14.0" /></font>
+                    </Label>
+                </VBox>
+
+                <Label text="Symptoms" textFill="#fce4ec" GridPane.rowIndex="1" />
+                <TextArea fx:id="symptomsArea" prefHeight="130.0" prefWidth="550.0" style="-fx-control-inner-background: #121212; -fx-text-fill: white; -fx-background-radius: 15; -fx-border-color: #ff4081; -fx-border-radius: 15;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                <Label text="Consultation" textFill="#fce4ec" GridPane.rowIndex="2" />
+                <HBox alignment="CENTER_LEFT" spacing="45.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <RadioButton fx:id="radioOnline" onAction="#toggleTimeVisibility" text="Online Session" textFill="WHITE">
+                        <toggleGroup><ToggleGroup fx:id="modeGroup" /></toggleGroup>
+                    </RadioButton>
+                    <RadioButton fx:id="radioPhysical" onAction="#toggleTimeVisibility" selected="true" text="Physical (At Campus)" textFill="WHITE" toggleGroup="$modeGroup" />
+                </HBox>
+
+                <Label fx:id="timeLabel" text="Preferred Time" textFill="#fce4ec" GridPane.rowIndex="3" />
+                <ComboBox fx:id="timeBox" prefHeight="50.0" prefWidth="550.0" style="-fx-background-radius: 12; -fx-background-color: #ffffff;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            </children>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
+        </GridPane>
+
+        <Button onAction="#requestAppointment" prefHeight="60.0" prefWidth="420.0" style="-fx-background-color: linear-gradient(to right, #ff4081, #9c27b0); -fx-text-fill: white; -fx-background-radius: 30; -fx-font-weight: bold; -fx-font-size: 20px; -fx-cursor: hand;" text="Confirm Appointment" />
+    </children>
+</VBox>

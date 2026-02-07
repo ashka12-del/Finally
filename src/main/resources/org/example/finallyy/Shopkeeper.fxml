@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane prefHeight="720.0" prefWidth="1080.0" style="-fx-background-color: #0F0F0F;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.finallyy.ShopkeeperController">
+    <children>
+        <VBox spacing="0">
+            <children>
+                <HBox alignment="CENTER_LEFT" prefHeight="90.0" spacing="20" style="-fx-background-color: linear-gradient(to right, #1a1a1a, #2D0B3D); -fx-padding: 0 40 0 40; -fx-border-color: #4A148C; -fx-border-width: 0 0 3 0;">
+                    <children>
+                        <VBox alignment="CENTER_LEFT">
+                            <children>
+                                <Text fill="WHITE" text="Shopkeeper Portal">
+                                    <font><Font name="System Bold" size="28.0" /></font>
+                                </Text>
+                                <Text fill="#C850C0" text="Control Center • Monitoring Active Services">
+                                    <font><Font size="14.0" /></font>
+                                </Text>
+                            </children>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button onAction="#handleLogout" style="-fx-background-color: #FF4B5C; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 30; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);" text="Logout" />
+                    </children>
+                </HBox>
+
+                <VBox fx:id="selectionArea" alignment="CENTER" spacing="50" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Text fill="WHITE" text="Welcome Back! Select a Service to Manage">
+                            <font><Font name="System Bold" size="34.0" /></font>
+                        </Text>
+                        <HBox alignment="CENTER" spacing="60">
+                            <children>
+                                <VBox fx:id="cardPending" alignment="CENTER" onMouseClicked="#showPendingTable" prefHeight="340.0" prefWidth="380.0" spacing="25" style="-fx-background-color: #161616; -fx-background-radius: 35; -fx-border-color: #3D0E5A; -fx-border-width: 4; -fx-cursor: hand; -fx-border-radius: 35;">
+                                    <children>
+                                        <ImageView fitHeight="110.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+                                            <image><Image url="@queue.png" /></image>
+                                        </ImageView>
+                                        <Label style="-fx-font-size: 28; -fx-font-weight: bold;" text="Printing Queue" textFill="WHITE" />
+                                        <Label style="-fx-font-size: 16; -fx-font-weight: bold;" text="MANAGE INCOMING ORDERS" textFill="#BBBBBB" />
+                                    </children>
+                                </VBox>
+
+                                <VBox fx:id="cardCompleted" alignment="CENTER" onMouseClicked="#showCompletedTable" prefHeight="340.0" prefWidth="380.0" spacing="25" style="-fx-background-color: #161616; -fx-background-radius: 35; -fx-border-color: #3D0E5A; -fx-border-width: 4; -fx-cursor: hand; -fx-border-radius: 35;">
+                                    <children>
+                                        <ImageView fitHeight="110.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+                                            <image><Image url="@rightbutton.png" /></image>
+                                        </ImageView>
+                                        <Label style="-fx-font-size: 28; -fx-font-weight: bold;" text="Completed History" textFill="WHITE" />
+                                        <Label style="-fx-font-size: 16; -fx-font-weight: bold;" text="TRACK PAST TRANSACTIONS" textFill="#BBBBBB" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+
+                <VBox fx:id="tableArea" managed="false" spacing="20" style="-fx-padding: 40;" visible="false" VBox.vgrow="ALWAYS">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="20">
+                            <Button onAction="#backToSelection" style="-fx-background-color: #3D0E5A; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 15; -fx-padding: 8 20; -fx-cursor: hand;" text="← Back to Dashboard" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label fx:id="tableHeader" style="-fx-font-size: 26; -fx-font-weight: bold;" textFill="WHITE" />
+                        </HBox>
+
+                        <StackPane style="-fx-background-color: #1A1A1A; -fx-background-radius: 20; -fx-padding: 10;" VBox.vgrow="ALWAYS">
+                            <children>
+                                <TableView fx:id="queueTable" style="-fx-background-color: transparent; -fx-control-inner-background: #1A1A1A; -fx-table-cell-border-color: #333333;">
+                                    <columns>
+                                        <TableColumn fx:id="colToken" prefWidth="120" text="Token No" />
+                                        <TableColumn fx:id="colStudent" prefWidth="180" text="Student ID" />
+                                        <TableColumn fx:id="colDetails" prefWidth="480" text="Print Details" />
+                                        <TableColumn fx:id="colAction" prefWidth="150" text="Update Status" />
+                                    </columns>
+                                </TableView>
+                                <TableView fx:id="completedTable" style="-fx-background-color: transparent; -fx-control-inner-background: #1A1A1A; -fx-table-cell-border-color: #333333;" visible="false">
+                                    <columns>
+                                        <TableColumn fx:id="colCompToken" prefWidth="150" text="Token No" />
+                                        <TableColumn fx:id="colCompStudent" prefWidth="250" text="Student ID" />
+                                        <TableColumn fx:id="colCompStatus" prefWidth="530" text="Completion Timestamp" />
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </StackPane>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </children>
+</StackPane>
